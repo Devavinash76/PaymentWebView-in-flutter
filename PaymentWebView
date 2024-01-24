@@ -1,0 +1,61 @@
+import 'package:flutter/material.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+import 'Screen/thankyou.dart';
+
+class WebViewExample extends StatefulWidget {
+  final String url;
+
+  const WebViewExample({Key? key, required this.url}) : super(key: key);
+
+  @override
+  State<WebViewExample> createState() => _WebViewExampleState();
+}
+
+class _WebViewExampleState extends State<WebViewExample> {
+  // bool paymentSuccessful = false;
+  late WebViewController _webViewController;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text('Payment Gateway'),
+      ),
+      body: WebView(
+        initialUrl: widget.url,
+        debuggingEnabled: true,
+        onWebResourceError: (WebResourceError error) {
+        },
+        onWebViewCreated: (WebViewController webViewController) {
+          _webViewController = webViewController;
+        },
+        onPageFinished: (value) async {
+          print("Avinash\n" + value);
+
+          // Get the HTML content of the page
+          final String htmlContent = await _webViewController.evaluateJavascript('document.documentElement.outerHTML');
+
+          print("HTML Content:\n$htmlContent");
+
+          // Check if the HTML content contains the success string
+          if (htmlContent.contains("PAYMENT_SUCCESS")) {
+            print("Payment successful");
+            // Perform actions or navigate to another page
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const Thankyou()),
+            );
+          } else {
+            print("Payment failed or other content");
+            // Handle other conditions if needed
+          }
+
+        },
+        javascriptMode: JavascriptMode.unrestricted,
+      ),
+    );
+  }
+}
