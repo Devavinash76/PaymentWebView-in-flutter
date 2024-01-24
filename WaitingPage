@@ -1,0 +1,248 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../paymentWebview.dart';
+import 'invite_frnd.dart';
+
+import 'package:http/http.dart';
+String? orderId;
+class waitingpage extends StatefulWidget {
+  const waitingpage({super.key});
+
+  @override
+  State<waitingpage> createState() => _waitingpageState();
+}
+
+class _waitingpageState extends State<waitingpage> {
+
+  @override
+  void initState() {
+    orderId = Get.arguments;
+    checkOutOrder();
+    super.initState();
+  }
+
+  var response;
+  Future<void> checkOutOrder() async {
+    try {
+        response = await post(
+        Uri.parse('https://       /master/APIs/ClubPackage/checkout'),
+        body: {
+          'order_id': orderId,
+        },
+        encoding: Encoding.getByName('utf-8'),
+      );
+
+      if (response.statusCode == 302) {
+        // Successful response
+        debugPrint('CheckOutOrder Details: ${response.headers}');
+        debugPrint('CheckOutOrder Response: ${response.body}');
+        print(response.persistentConnection);
+        print(response. reasonPhrase);
+        print(response. reasonPhrase);
+        print(response. statusCode);
+        print(response. body);
+        // print(response. body);
+
+        print(response. headers );
+        print(response. headers["location"]);
+        setState(() {
+          print("OrderId: $orderId");
+          print(response. headers["location"]);
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => WebViewExample(url:response. headers["location"]),));
+        });
+      } else {
+        // Handle other response status codes
+        debugPrint('Failed CheckOutOrder: ${response.statusCode}');
+        debugPrint('CheckOutOrder Response: ${response.body}');
+      }
+    } catch (e) {
+      // Handle network or request-related errors
+      debugPrint('Error in CheckOutOrder: $e');
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Color(0xFF141420),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 50,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(13.0),
+                child: FittedBox(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 32,
+                        height: 32,
+                        //padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: ShapeDecoration(
+                          color: Color(0xFFFD2F71),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '1',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 3,
+                        width: width / 6,
+                        color: Colors.pink,
+                      ),
+                      Container(
+                        height: 3,
+                        width: width / 6,
+                        color: Color(0xFF4E4E56),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Get.to(invite_fr());
+                        },
+                        child: Container(
+                          width: 32,
+                          height: 31,
+                          //padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: ShapeDecoration(
+                            color: Color(0xFF4E4E56),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(90),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              '2',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontFamily: 'Open Sans',
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                          height: 3,
+                          width: width / 6,
+                          color: Color(0xFF4E4E56)),
+                      Container(
+                        height: 3,
+                        width: width / 6,
+                        color: Color(0xFF4E4E56),
+                      ),
+                      Container(
+                        width: 32,
+                        height: 31,
+                        //padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: ShapeDecoration(
+                          color: Color(0xFF4E4E56),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(90),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '3',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Image.network(
+                "https://s3-alpha-sig.figma.com/img/5741/a5e1/91206b603246fecbe0cf9ac1e1fbe605?Expires=1705276800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Hkn78JOmWKDWPvQtZmyrXLCL4usra~jNCFylRIvhAxm2dTGoJ5xX8CzDGLHVxF6dzryOX7xe7K-0f2SPdgUrGA1mYAaAC1LETT8Y1Wx7pnTRfpRdbhRZfn7Uk37GyvGmmw1x8PDtRurljgjzl7qXcVzp7nIeea80l6DZlgEzE0msuke5EKvjHkUTSY5ZQxYsB~eTpYHi7y4DOKnOJ54ShloG-YSbeYnKZPp92cCwHM9~hbIFAXR~1ZP9xNhUtKPSXFxHbHfB5IhCDGlLmU232J74jkJ-NsPUggrNDWhKtVkV6joycahYDZdXeGA9aePvIyxzgGjAoCIs8yJJH~U0zA__",
+                width: width,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: Text(
+                  '(59)',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500,
+                    height: 0,
+                  ),
+                ),
+              ),
+              Center(
+                child: Text(
+                  'Waiting Confirmation',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              Center(
+                child: Text(
+                  'Payment Received Successfully',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w200,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 55.0),
+                child: Text(
+                  'Lorem Ipsum is simply dummy text f the printing and typesetting industry',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontFamily: 'Open Sans',
+                    fontWeight: FontWeight.w300,
+                    height: 0,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
